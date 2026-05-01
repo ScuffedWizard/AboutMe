@@ -6,46 +6,65 @@
 
 <title>Scuffedwizard | Software Developer</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
 <style>
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Segoe UI,Arial,sans-serif;
+font-family:'Inter',sans-serif;
 }
 
 body{
-background:#0f0f0f;
-color:#e5e5e5;
+background:#050505;
+color:#eaeaea;
 overflow-x:hidden;
+}
+
+/* WEBGL CANVAS */
+
+#bg{
+position:fixed;
+inset:0;
+width:100%;
+height:100%;
+z-index:-2;
+filter:blur(12px) brightness(0.7);
 }
 
 /* NAVBAR */
 
 nav{
 position:fixed;
-top:0;
-width:100%;
+top:20px;
+left:50%;
+transform:translateX(-50%);
 display:flex;
-justify-content:center;
-gap:35px;
-padding:18px;
-background:rgba(20,20,20,0.85);
-backdrop-filter:blur(8px);
-border-bottom:1px solid #2a2a2a;
+gap:30px;
+padding:14px 28px;
+
+background:rgba(255,255,255,0.04);
+backdrop-filter:blur(25px);
+border-radius:40px;
+border:1px solid rgba(255,255,255,0.06);
+
+box-shadow:
+0 10px 40px rgba(0,0,0,0.6),
+inset 0 1px 0 rgba(255,255,255,0.08);
+
 z-index:100;
 }
 
 nav a{
 color:#cfcfcf;
 text-decoration:none;
-font-weight:500;
-transition:0.25s;
+transition:0.3s;
 }
 
 nav a:hover{
-color:#ffffff;
+color:white;
 }
 
 /* SECTIONS */
@@ -56,78 +75,104 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-padding:80px 20px;
+padding:100px 20px;
 text-align:center;
 }
 
 h1{
-font-size:3rem;
-margin-bottom:10px;
+font-size:3.5rem;
+font-weight:900;
 color:white;
 }
+
+/* TYPING */
 
 .typing{
 font-size:1.4rem;
 color:#9a9a9a;
-height:30px;
+margin-top:8px;
 }
 
 /* BUTTON */
 
 button{
-margin-top:25px;
-padding:12px 28px;
+margin-top:30px;
+padding:14px 32px;
+border-radius:30px;
+
+background:linear-gradient(135deg,#3a3a3a,#6a6a6a);
 border:none;
-border-radius:6px;
-background:#2a2a2a;
-color:#eaeaea;
-font-weight:600;
+
+color:white;
+font-weight:700;
 cursor:pointer;
-transition:0.25s;
-}
 
-button:hover{
-background:#3a3a3a;
-transform:scale(1.05);
-}
+box-shadow:
+0 10px 30px rgba(0,0,0,0.6),
+inset 0 1px 0 rgba(255,255,255,0.3);
 
-/* ABOUT */
-
-.about{
-max-width:700px;
-line-height:1.7;
-color:#bdbdbd;
-margin-top:10px;
-}
-
-/* PROJECT GRID */
-
-.projects{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-max-width:900px;
-margin-top:35px;
-}
-
-.card{
-background:#181818;
-padding:25px;
-border-radius:10px;
-border:1px solid #2c2c2c;
 transition:0.3s;
 }
 
-.card:hover{
-transform:translateY(-6px);
-background:#202020;
+button:hover{
+transform:translateY(-3px) scale(1.03);
 }
 
-/* CONTACT LINKS */
+/* GLASS */
+
+.glass{
+position:relative;
+background:rgba(255,255,255,0.03);
+backdrop-filter:blur(35px);
+border:1px solid rgba(255,255,255,0.06);
+border-radius:20px;
+padding:30px;
+overflow:hidden;
+transition:0.3s;
+}
+
+/* EDGE GLOW */
+
+.glass::after{
+content:'';
+position:absolute;
+inset:-2px;
+border-radius:inherit;
+pointer-events:none;
+
+background:radial-gradient(
+circle 220px at var(--mx,50%) var(--my,50%),
+rgba(255,255,255,0.18),
+transparent 60%
+);
+
+opacity:0;
+transition:opacity 0.2s;
+}
+
+.glass:hover::after{
+opacity:1;
+}
+
+/* PROJECTS */
+
+.projects{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+max-width:1000px;
+margin-top:40px;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.02);
+}
+
+/* CONTACT */
 
 .contact a{
 display:block;
-margin:10px;
+margin:12px;
 color:#bdbdbd;
 text-decoration:none;
 }
@@ -139,17 +184,17 @@ color:white;
 /* FOOTER */
 
 footer{
-padding:35px;
+padding:40px;
 text-align:center;
-font-size:0.9rem;
-color:#7a7a7a;
-border-top:1px solid #2a2a2a;
+color:#6a6a6a;
 }
 
 </style>
 </head>
 
 <body>
+
+<canvas id="bg"></canvas>
 
 <nav>
 <a href="#home">Home</a>
@@ -159,69 +204,47 @@ border-top:1px solid #2a2a2a;
 </nav>
 
 <section id="home">
-
 <h1>Scuffedwizard</h1>
-
 <div class="typing" id="typing"></div>
-
-<button onclick="scrollToSection('projects')">
-View My Work
-</button>
-
+<button onclick="scrollToSection('projects')">View My Work</button>
 </section>
 
 <section id="about">
-
 <h1>About Me</h1>
-
-<p class="about">
-I'm <strong>Scuffedwizard</strong>, a software developer who enjoys building
-cool things with code. I like experimenting with new technologies,
-creating tools, and working on interesting projects.
-This website is my small place on the internet where I share what I build.
-</p>
-
+<div class="glass">
+I'm <strong>Scuffedwizard</strong>, a developer who builds clean and satisfying experiences.
+</div>
 </section>
 
 <section id="projects">
-
 <h1>Projects</h1>
 
 <div class="projects">
 
-<div class="card">
+<div class="glass card">
 <h3>Project One</h3>
-<p>A project you built. Replace this with your real work.</p>
+<p>Something cool</p>
 </div>
 
-<div class="card">
+<div class="glass card">
 <h3>Project Two</h3>
-<p>Another project you want to showcase.</p>
+<p>Something cool</p>
 </div>
 
-<div class="card">
+<div class="glass card">
 <h3>Project Three</h3>
-<p>Something cool you're working on.</p>
+<p>Something cool</p>
 </div>
 
 </div>
-
 </section>
 
 <section id="contact">
-
 <h1>Contact</h1>
 
-<div class="contact">
-
-<a href="mailto:Scuffedwizard@outlook.com">
-📧 Scuffedwizard@outlook.com
-</a>
-
-<a href="https://www.youtube.com/@Scuffed_Wizard" target="_blank">
-🎥 YouTube - Scuffed Wizard
-</a>
-
+<div class="glass contact">
+<a href="mailto:Scuffedwizard@outlook.com">📧 Email</a>
+<a href="#">🎥 YouTube</a>
 </div>
 
 </section>
@@ -232,58 +255,159 @@ This website is my small place on the internet where I share what I build.
 
 <script>
 
-/* TYPING EFFECT */
+/* TYPING */
 
-const words = [
-"Software Developer",
-"Problem Solver",
-"Code Enthusiast",
-"Builder of Cool Stuff"
-];
-
-let i=0;
-let j=0;
-let current="";
-let deleting=false;
+const words=["Software Developer","Problem Solver","Builder"];
+let i=0,j=0,del=false;
 
 function type(){
+let w=words[i];
+j+=del?-1:1;
+typing.textContent=w.substring(0,j);
 
-current = words[i];
+if(!del && j===w.length){del=true;setTimeout(type,1200);return;}
+if(del && j===0){del=false;i=(i+1)%words.length;}
 
-if(!deleting){
-j++;
-}else{
-j--;
+setTimeout(type,del?60:100);
 }
-
-document.getElementById("typing").textContent = current.substring(0,j);
-
-if(!deleting && j===current.length){
-deleting=true;
-setTimeout(type,1200);
-return;
-}
-
-if(deleting && j===0){
-deleting=false;
-i++;
-if(i===words.length){
-i=0;
-}
-}
-
-setTimeout(type,deleting?60:100);
-
-}
-
 type();
 
-/* SMOOTH SCROLL */
+/* EDGE GLOW */
+
+document.querySelectorAll(".glass").forEach(el=>{
+el.addEventListener("mousemove",e=>{
+const r=el.getBoundingClientRect();
+const x=((e.clientX-r.left)/r.width)*100;
+const y=((e.clientY-r.top)/r.height)*100;
+el.style.setProperty("--mx",x+"%");
+el.style.setProperty("--my",y+"%");
+});
+});
+
+/* WEBGL */
+
+const canvas = document.getElementById("bg");
+const gl = canvas.getContext("webgl");
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+const vertex = `
+attribute vec2 position;
+void main(){
+gl_Position = vec4(position,0.0,1.0);
+}
+`;
+
+const fragment = `
+precision mediump float;
+
+uniform vec2 resolution;
+uniform float time;
+uniform vec2 mouse;
+
+void main(){
+
+vec2 uv = gl_FragCoord.xy / resolution.xy;
+uv -= 0.5;
+uv.x *= resolution.x / resolution.y;
+
+float t = time * 0.25;
+
+/* smooth layered waves */
+
+float n = sin(uv.x*3.0 + t) + sin(uv.y*3.5 - t);
+float n2 = sin((uv.x+uv.y)*4.5 + t*1.2);
+
+float c = (n + n2) * 0.5;
+
+/* grayscale depth */
+
+float shade = 0.15 + 0.5 * sin(c);
+
+/* subtle contrast curve */
+shade = pow(shade, 1.3);
+
+/* mouse light */
+
+float d = distance(uv, mouse);
+shade += 0.15/(d+0.4);
+
+gl_FragColor = vec4(vec3(shade),1.0);
+}
+`;
+
+function compile(type,src){
+let s=gl.createShader(type);
+gl.shaderSource(s,src);
+gl.compileShader(s);
+return s;
+}
+
+const program = gl.createProgram();
+gl.attachShader(program,compile(gl.VERTEX_SHADER,vertex));
+gl.attachShader(program,compile(gl.FRAGMENT_SHADER,fragment));
+gl.linkProgram(program);
+
+gl.useProgram(program);
+
+const buffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([
+-1,-1,1,-1,-1,1,
+-1,1,1,-1,1,1
+]),gl.STATIC_DRAW);
+
+const position = gl.getAttribLocation(program,"position");
+gl.enableVertexAttribArray(position);
+gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);
+
+const timeLoc = gl.getUniformLocation(program,"time");
+const resLoc = gl.getUniformLocation(program,"resolution");
+const mouseLoc = gl.getUniformLocation(program,"mouse");
+
+let targetTime = 0;
+let currentTime = 0;
+let mousePos = [0,0];
+
+window.addEventListener("scroll",()=>{
+const max = document.body.scrollHeight - innerHeight;
+targetTime = (scrollY/max)*10.0;
+});
+
+window.addEventListener("mousemove",e=>{
+mousePos = [
+(e.clientX/innerWidth)-0.5,
+-(e.clientY/innerHeight)+0.5
+];
+});
+
+function render(){
+
+currentTime += (targetTime - currentTime)*0.08;
+
+gl.viewport(0,0,canvas.width,canvas.height);
+
+gl.uniform1f(timeLoc,currentTime);
+gl.uniform2f(resLoc,canvas.width,canvas.height);
+gl.uniform2f(mouseLoc,mousePos[0],mousePos[1]);
+
+gl.drawArrays(gl.TRIANGLES,0,6);
+
+requestAnimationFrame(render);
+}
+
+render();
+
+window.addEventListener("resize",()=>{
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+});
+
+/* SCROLL */
 
 function scrollToSection(id){
-document.getElementById(id).scrollIntoView({
-behavior:"smooth"
-});
+document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
 
 </script>
